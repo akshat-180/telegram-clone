@@ -1,0 +1,71 @@
+[
+  {
+    "firstName": "akshat",
+    "lastName": "goel",
+    "phone": "9416441371",
+    "password": "$2b$10$W9727yFJ5Lzz0MNj0uHyheJx3CHyKc6.AmJv6wTwyEo1YkA.OHeNa",
+    "friends": [
+      {
+        "firstName": "akshat2",
+        "lastName": "goel2",
+        "phone": "9416447371",
+        "id": "6db90030-1f5b-4631-bd03-e1473eebec70"
+      }
+    ],
+    "ownedGroup": [
+      {
+        "group_id": "62262027-b8cb-4230-939c-92a719424e46",
+        "group_name": "MyGroup"
+      }
+    ],
+    "joinedGroup": []
+  },
+  {
+    "firstName": "akshat2",
+    "lastName": "goel2",
+    "phone": "9416447371",
+    "password": "$2b$10$WmK6vJXGIVmUD4xDpworZ.cYCpG8Y1MCr9pU0VdJs.lklyls9UxN2",
+    "friends": [
+      {
+        "firstName": "akshat",
+        "lastName": "goel",
+        "phone": "9416441371",
+        "id": "6db90030-1f5b-4631-bd03-e1473eebec70"
+      },
+      {
+        "firstName": "akshat3",
+        "lastName": "goel3",
+        "phone": "9416847371",
+        "id": "e9312620-daec-4241-9014-b183c2d4849e"
+      }
+    ],
+    "ownedGroup": [],
+    "joinedGroup": [
+      {
+        "joinedGroup_group_id": "62262027-b8cb-4230-939c-92a719424e46",
+        "group_name": "MyGroup"
+      }
+    ]
+  },
+  {
+    "firstName": "akshat3",
+    "lastName": "goel3",
+    "phone": "9416847371",
+    "password": "$2b$10$aXjbD6JmHSEhUnjYDcah2eAqoM3q8nIShAGM0w.W77A45NaLT8.Xq",
+    "friends": [
+      {
+        "firstName": "akshat2",
+        "lastName": "goel2",
+        "phone": "9416447371",
+        "id": "e9312620-daec-4241-9014-b183c2d4849e"
+      }
+    ],
+    "ownedGroup": [],
+    "joinedGroup": [
+      {
+        "joinedGroup_group_id": "62262027-b8cb-4230-939c-92a719424e46",
+        "group_name": "MyGroup"
+      }
+    ]
+  }
+]

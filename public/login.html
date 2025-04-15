@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Dark Auth</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0e1621; /* Telegram dark background */
+        }
+
+        .container {
+            background: #17212b; /* Telegram dark container background */
+            width: 100%;
+            max-width: 360px;
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .logo {
+            width: 140px;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .form:not(.active) {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(30px);
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #e1e3e6; /* Light text for dark theme */
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #2f3d4c; /* Darker border for inputs */
+            border-radius: 8px;
+            font-size: 16px;
+            background: #1f2a36; /* Dark input background */
+            color: #e1e3e6; /* Light text for inputs */
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0088cc; /* Telegram blue for focus */
+            box-shadow: 0 0 0 2px rgba(0, 136, 204, 0.2);
+        }
+
+        input::placeholder {
+            color: #6c7883; /* Placeholder text color */
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: #0088cc; /* Telegram blue */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #0077b3; /* Slightly darker blue on hover */
+        }
+
+        .toggle-link {
+            color: #0088cc; /* Telegram blue for links */
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 24px;
+            display: inline-block;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .toggle-link:hover {
+            text-decoration: underline;
+        }
+
+        .notice {
+            color: #6c7883; /* Muted text color */
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 24px;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M120 240C186.274 240 240 186.274 240 120C240 53.7258 186.274 0 120 0C53.7258 0 0 53.7258 0 120C0 186.274 53.7258 240 120 240Z" fill="#0088CC"/>
+            <path d="M50.9375 119.984C83.1875 105.972 103.594 96.972 112.156 92.984C142.656 78.984 150.75 75.468 155.75 75.468C156.656 75.468 158.281 75.75 159.406 76.734C160.344 77.531 160.625 78.562 160.625 79.218C160.625 79.968 160.438 81.374 160.156 83.437L153.031 118.562C151.469 128.156 150.656 133.734 150.594 135.296C150.281 139.453 149.125 140.859 147.906 141.046C145.25 141.468 143 139.359 140.062 137.343C135.875 134.296 133.344 132.281 128.219 128.296C122.562 123.937 125.812 121.734 128.594 118.734C129.375 117.843 145.688 102.609 146.031 101.109C146.188 100.546 146.281 99.4687 145.406 98.7187C144.625 98.0625 143.375 98.3437 142.438 98.625C141.188 99 127.656 107.625 103.5 124.5C99.0938 127.781 95.4062 129.375 92.4375 129.375C88.9375 129.375 85.9375 127.594 83.4375 124.031C80.1875 119.437 78.375 113.859 78 107.297C77.7188 102.469 78.625 97.875 80.7188 93.5156C82.8125 89.1562 85.8125 85.3594 89.7188 82.125C94.1562 78.5156 98.9062 76.0781 104.062 74.8125C109.219 73.5469 114.75 74.1562 120.656 76.6406C127.219 79.4062 139.125 85.6406 156.375 95.3438L159.562 97.2656C163.312 99.4688 166.406 100.547 168.844 100.547C172.656 100.547 175.125 97.7344 176.25 92.1094C177.375 86.4844 179.906 70.4531 181.031 61.6406C181.406 58.4531 180.375 56.625 179.062 55.7344C177.094 54.4688 173.531 55.2188 170.656 56.625C165.094 59.4375 144.656 71.625 109.344 93.1875C102.469 97.125 96.375 99.0937 91.0625 99.0937C85.75 99.0937 81.125 97.125 77.1875 93.1875C72.5312 88.5 70.2188 82.4531 70.2188 75.0469C70.2188 67.6406 73.2188 61.5 79.2188 56.625C84.875 52.0312 94.625 48.9375 108.469 47.3438C122.312 45.75 136.531 46.3594 151.125 49.1719C156.469 50.1562 160.375 50.4375 162.844 50.4375C170.344 50.4375 174.656 47.3438 175.781 41.1562C176.156 38.8125 176.719 34.4062 175.5 32.4375C174.375 30.6562 171.656 30 170.062 30C166.781 30 162.188 31.6406 156.281 34.9219C144.562 41.3906 129.656 51.2812 111.562 64.5938C89.625 80.7188 73.7812 94.5 64.0312 105.938C54.2812 117.375 49.9062 126.375 49.9062 132.938C49.9062 137.625 52.125 141.562 56.5625 144.75C60.0938 147.281 65.4375 148.969 72.5938 149.812C77.9375 150.469 85.8438 150.656 96.3125 150.375C107.625 150.094 116.312 149.531 122.375 148.688C133.875 147.094 142.125 143.531 147.125 138C147.719 137.438 148.531 136.5 148.812 135.938C149.281 135 149.062 134.344 148.812 134.062C148.469 133.594 147.562 133.312 146.188 133.5C141.75 133.969 134.625 136.125 124.812 139.969C119.625 141.938 115.406 142.969 112.156 142.969C106.156 142.969 101.25 140.156 97.4375 134.531C94.2812 130.031 92.875 124.406 93.2188 117.656C93.4688 112.969 95.1562 105.75 98.2812 96C98.4688 95.4375 98.625 94.9688 98.75 94.5938C99.0938 93.5625 99.0625 92.9062 98.75 92.625C98.4375 92.3438 97.8438 92.25 97.0625 92.3438C90.5 93.0938 81.7812 96.6562 70.9062 103.031C62.75 107.906 57.2812 111.844 54.5 114.844C51.7188 117.844 50.2812 121.125 50.1875 124.688C50.0938 128.344 51.5938 131.156 54.6875 133.125C57.875 135.188 63.7812 136.406 72.4062 136.781C77.8438 137.062 85.625 137.156 95.75 137.062C104.656 136.969 111.094 136.688 115.062 136.219C124.75 135.094 131.312 132.656 134.75 128.906C135.531 128.063 136.219 127.031 136.812 125.812C137.406 124.594 137.5 123.656 137.094 123C136.781 122.531 136.031 122.062 134.844 121.594Z" fill="white"/>
+        </svg>
+        <div class="form-container">
+            <!-- Login Form -->
+            <!-- <form id="loginForm" class="form active">
+                <h1>Sign in to Telegram</h1>
+                <div class="input-group">
+                    <input type="text" id="loginPhone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit">NEXT</button>
+            </form> -->
+
+            <form id="loginForm" class="form active">
+              <h1>Sign in to Telegram</h1>
+              <div class="input-group">
+                  <input type="text" id="loginPhone" placeholder="Phone Number" required>
+              </div>
+              <div class="input-group">
+                  <input type="password" id="loginPassword" placeholder="Password" required>
+              </div>
+              <button type="submit">NEXT</button>
+          </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="form">
+                <h1>Create Account</h1>
+                <div class="input-group">
+                    <input type="text" id="signupFirstName" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="signupLastName" placeholder="Last Name">
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="signupPhone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                </div>
+                <button type="submit">SIGN UP</button>
+            </form>
+
+            <!-- Update User Form -->
+            <form id="updateUserForm" class="form">
+                <h1>Update User</h1>
+                <div class="input-group">
+                    <input type="text" id="updateFirstName" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="updateLastName" placeholder="Last Name">
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="updatePhone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="updatePassword" placeholder="New Password">
+                </div>
+                <button type="submit">UPDATE</button>
+            </form>
+
+            <!-- Delete User Form -->
+            <form id="deleteUserForm" class="form">
+                <h1>Delete User</h1>
+                <div class="input-group">
+                    <input type="tel" id="deletePhone" placeholder="Phone Number" required>
+                </div>
+                <button type="submit">DELETE</button>
+            </form>
+        </div>
+
+        <button class="toggle-link" onclick="toggleForms('signup')">Sign up</button>
+        <button class="toggle-link" onclick="toggleForms('update')">Update User</button>
+        <button class="toggle-link" onclick="toggleForms('delete')">Delete User</button>
+        <p class="notice">By signing up, you agree to our Terms of Service and Privacy Policy</p>
+    </div>
+
+    <script>
+        // ======== Add these FIRST in your script ========
+// Universal error handler
+function handleError(error, context) {
+  console.error(`[${context}] Error:`, error);
+  alert(error.message || `Error during ${context}. Check console.`);
+}
+
+// API request wrapper
+async function makeRequest(endpoint, body, method = 'POST') {
+  try {
+    const response = await fetch(`http://localhost:3009${endpoint}`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    // Check if the response includes a redirect URL
+    if (result.redirect) {
+      window.location.href = result.redirect; // Redirect to the new page
+    }
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// ===== Then keep your existing form handlers below =====
+// (Login, Signup, Update, Delete handlers go here)
+  // Toggle between forms (Login, Signup, Update, Delete)
+function toggleForms(formType) {
+  const forms = ['loginForm', 'signupForm', 'updateUserForm', 'deleteUserForm'];
+  forms.forEach(formId => {
+    const form = document.getElementById(formId);
+    form.classList.remove('active');
+  });
+  
+  if (formType === 'signup') document.getElementById('signupForm').classList.add('active');
+  else if (formType === 'update') document.getElementById('updateUserForm').classList.add('active');
+  else if (formType === 'delete') document.getElementById('deleteUserForm').classList.add('active');
+  else document.getElementById('loginForm').classList.add('active');
+}
+
+// Universal error handler
+function handleError(error, context) {
+  console.error(`[${context}] Error:`, error);
+  alert(error.message || `Error during ${context}. Please check console.`);
+}
+
+// API request handler
+async function makeRequest(endpoint, body, method = 'POST') {
+  try {
+    const response = await fetch(`http://localhost:3009${endpoint}`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Form handlers
+// document.getElementById('loginForm').addEventListener('submit', async (e) => {
+//   e.preventDefault();
+//   try {
+//     const result = await makeRequest('/login', {
+//       phone: document.getElementById('loginPhone').value,
+//       password: document.getElementById('loginPassword').value
+//     });
+//     alert(result.message);
+//     toggleForms(''); // Return to login
+//   } catch (error) {
+//     handleError(error, 'Login');
+//   }
+// });
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent form from refreshing the page
+
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phone: document.getElementById('loginPhone').value,
+                password: document.getElementById('loginPassword').value
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message); // Show success message
+            localStorage.setItem('phone', result.phone); // Store phone number in localStorage
+            window.location.href = result.redirect; // Redirect to mainpage.html
+        } else {
+            alert(result.message); // Show error message
+        }
+    } catch (error) {
+        console.error("Login Error:", error);
+        alert("An error occurred while logging in. Please try again.");
+    }
+});
+
+
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const result = await makeRequest('/signup', {
+      firstName: document.getElementById('signupFirstName').value,
+      lastName: document.getElementById('signupLastName').value,
+      phone: document.getElementById('signupPhone').value,
+      password: document.getElementById('signupPassword').value
+    });
+    alert(result.message);
+    toggleForms(''); // Switch to login after signup
+  } catch (error) {
+    handleError(error, 'Signup');
+  }
+});
+
+document.getElementById('updateUserForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const result = await makeRequest('/update', {
+      firstName: document.getElementById('updateFirstName').value,
+      lastName: document.getElementById('updateLastName').value,
+      phone: document.getElementById('updatePhone').value,
+      password: document.getElementById('updatePassword').value
+    });
+    alert(result.message);
+    toggleForms(''); // Return to login
+  } catch (error) {
+    handleError(error, 'Update');
+  }
+});
+
+document.getElementById('deleteUserForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const result = await makeRequest('/delete', {
+      phone: document.getElementById('deletePhone').value
+    });
+    alert(result.message);
+    toggleForms(''); // Return to login
+  } catch (error) {
+    handleError(error, 'Delete');
+  }
+});
+    </script>
+</body>
+</html>

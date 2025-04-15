@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Main Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background: #0e1621; /* Telegram dark background */
+            color: #e1e3e6; /* Light text for dark theme */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 400px; /* Wider sidebar */
+            background: #17212b; /* Telegram dark container background */
+            border-right: 1px solid #2f3d4c; /* Darker border */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #2f3d4c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .sidebar-header .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sidebar-header button {
+            background: #0088cc; /* Telegram blue */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .sidebar-header button:hover {
+            background: #0077b3; /* Slightly darker blue on hover */
+        }
+
+        .search-bar {
+            padding: 10px 20px;
+            border-bottom: 1px solid #2f3d4c;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #1f2a36; /* Dark input background */
+            border: 1px solid #2f3d4c;
+            border-radius: 8px;
+            color: #e1e3e6;
+            font-size: 14px;
+        }
+
+        .search-bar input::placeholder {
+            color: #6c7883; /* Placeholder text color */
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .chat-item:hover {
+            background: #1f2a36; /* Darker background on hover */
+        }
+
+        .chat-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #2f3d4c; /* Default background for no photo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c7883; /* Muted text color */
+            font-size: 20px;
+        }
+
+        .chat-item .details {
+            flex: 1;
+        }
+
+        .chat-item .name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .chat-item .last-message {
+            font-size: 14px;
+            color: #6c7883; /* Muted text color */
+        }
+
+        /* Main Chat Area */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #2f3d4c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .chat-header button {
+            background: #0088cc; /* Telegram blue */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .chat-header button:hover {
+            background: #0077b3; /* Slightly darker blue on hover */
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .message.sent {
+            background: #0088cc; /* Telegram blue */
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.received {
+            background: #1f2a36; /* Darker background */
+            color: #e1e3e6;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #2f3d4c;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            background: #1f2a36; /* Dark input background */
+            border: 1px solid #2f3d4c;
+            border-radius: 8px;
+            color: #e1e3e6;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            background: #0088cc; /* Telegram blue */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .chat-input button:hover {
+            background: #0077b3; /* Slightly darker blue on hover */
+        }
+
+        .emoji-button {
+            background: none;
+            border: none;
+            color: #6c7883; /* Muted text color */
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-button:hover {
+            color: #0088cc; /* Telegram blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Telegram</h2>
+            <div class="buttons">
+                <button>New Group</button>
+                <button>Profile</button>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="chat-list">
+            <!-- Chat Items -->
+            
+            
+            <!-- Add more chat items here -->
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="main-chat">
+        <div class="chat-header">
+            <h2 id="chatUserName"></h2>
+            <button>Call</button>
+        </div>
+        <div class="chat-messages">
+            <!-- Messages -->
+            <ul id="messages"></ul>
+            
+            <!-- Add more messages here -->
+        </div>
+        <form id="form" class="chat-input">
+        
+            <button class="emoji-button">😊</button>
+            <input type="text" placeholder="Type a message..."id="input">
+            <button>Send</button>
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+    
+
+
+
+
+  var chatList = document.querySelector('.chat-list');
+  var chatUserName = document.getElementById('chatUserName');
+  var socket = io();
+  var messages = document.getElementById('messages');
+  var form = document.getElementById('form');
+  var input = document.getElementById('input');
+  const user = localStorage.getItem('phone');
+  let allMessages = [];
+  let recevier_data = {}
+  let pollingInterval; // Declare this outside your onclick
+  let pollingStarted = false;
+
+  
+fetch('http://localhost:3009/friends', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: user }) // <-- this uses the one from localStorage
+})
+.then(response => response.json())
+.then(data => {
+    const friends = data.friends || [];
+    const ownedGroups = data.ownedGroup || [];
+    const joinedGroups = data.joinedGroup || [];
+
+    const chatList = document.querySelector('.chat-list');
+    chatList.innerHTML = '';
+    friends.forEach(friend => {
+        const chatItem = document.createElement('div');
+        chatItem.className = 'chat-item';
+        chatItem.innerHTML = `
+            <img src="" alt="User">
+            <div class="details">
+                <div class="name">${friend.firstName} ${friend.lastName}</div>
+                <div class="last-message">${friend.phone}</div>
+            </div>
+        `;
+        
+        chatItem.onclick = function () {
+            chatUserName.textContent = `${friend.firstName} ${friend.lastName}`;
+            recevier_data = friend;
+
+    allMessages = []; // Clear previous messages
+
+    console.log('hi',friend.id);
+    // Fetch the messages from the friend's JSON file
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+
+    // Start polling every 1000ms (or 10ms if you're testing aggressively)
+    pollingInterval = setInterval(() => {
+        fetch(`/chats/${friend.id}.json`)
+            .then(response => response.json())
+            .then(data => {
+                allMessages = data;
+                displayMessages(); // Refresh UI
+            })
+            .catch(error => console.error('Error loading JSON data:', error));
+    }, 1000);
+                };
+        chatList.appendChild(chatItem);
+    });
+
+    // --- Display Owned Groups ---
+    ownedGroups.forEach(group => {
+        console.log("1");
+        const chatItem = document.createElement('div');
+        chatItem.className = 'chat-item';
+        chatItem.innerHTML = `
+            <img src="" alt="Group">
+            <div class="details">
+                <div class="name">📛 ${group.group_name}</div>
+                <div class="last-message">Owned Group</div>
+            </div>
+        `;
+
+        chatItem.onclick = function () {
+            chatUserName.textContent = `📛 ${group.group_name}`;
+            recevier_data = { phone: 'GROUP', id: group.group_id };
+            allMessages = [];
+
+            if (pollingInterval) clearInterval(pollingInterval);
+
+            pollingInterval = setInterval(() => {
+                fetch(`/chats/${group.group_id}.json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        allMessages = data;
+                        displayMessages();
+                    });
+            }, 1000);
+        };
+
+        chatList.appendChild(chatItem);
+    });
+    console.log("Joined Groups:", joinedGroups);
+    // --- Display Joined Groups ---
+    joinedGroups.forEach(group => {
+        console.log("2");
+        const chatItem = document.createElement('div');
+        chatItem.className = 'chat-item';
+        chatItem.innerHTML = `
+            <img src="" alt="Group">
+            <div class="details">
+                <div class="name"> ${group.group_name}</div>
+                <div class="last-message">Joined Group</div>
+            </div>
+        `;
+
+        chatItem.onclick = function () {
+            chatUserName.textContent = ` ${group.group_name}`;
+            recevier_data = { phone: 'GROUP', id: group.joinedGroup_group_id };
+            allMessages = [];
+            if (pollingInterval) clearInterval(pollingInterval);
+
+            pollingInterval = setInterval(() => {
+                fetch(`/chats/${group.joinedGroup_group_id}.json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        allMessages = data;
+                        displayMessages();
+                    });
+            }, 1000);
+        };
+
+        chatList.appendChild(chatItem);
+    });
+})
+.catch(error => console.error('Error fetching friends:', error));
+
+function displayMessages() {
+    try {
+        messages.innerHTML = ''; // Clear current messages on the page
+        allMessages.forEach(message => {
+            const messageElement = document.createElement('li');
+            messageElement.className = message.sender === user ? 'message sent' : 'message received';
+            messageElement.textContent = message.message;
+            messages.appendChild(messageElement);
+        });
+        window.scrollTo(0, document.body.scrollHeight); // Scroll to the latest message
+    } catch (err) {
+        console.error("Error in displayMessages:", err);
+    }
+}
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!recevier_data.phone) {
+    alert("Please select a user to chat with first.");
+    return;
+}
+
+    if (input.value) {
+        const newMessage = {
+            'recevier': recevier_data.phone,
+            'sender': user,
+            'message': input.value,
+            'timestamp': new Date().toISOString(),
+            'id':recevier_data.id
+        };
+
+        allMessages.push(newMessage); // Add new message to the message list
+        socket.emit('chat message', newMessage); // Emit the message to the server
+
+        input.value = ''; // Make the message input empty
+
+        // Display the new message on the page
+        const messageElement = document.createElement('li');
+        messageElement.className = 'message sent'; // Sent message
+        messageElement.textContent = (newMessage.message);
+        messages.appendChild(messageElement);
+        window.scrollTo(0, document.body.scrollHeight); // Scroll to the latest message
+
+        console.log('Sending message to:', recevier_data);
+    }
+});
+
+// Listen for incoming messages
+socket.on('chat message', function (msg) {
+    // Display the received message
+    const messageElement = document.createElement('li');
+    messageElement.className = 'message received'; // Received message
+    messageElement.textContent = msg.message;
+    messages.appendChild(messageElement);
+    window.scrollTo(0, document.body.scrollHeight); // Scroll to the latest message
+});
+
+</script>
+</body>
+</html>
