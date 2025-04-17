@@ -460,15 +460,6 @@ form.addEventListener('submit', function (e) {
     }
 });
 
-// Listen for incoming messages
-socket.on('chat message', function (msg) {
-    // Display the received message
-    const messageElement = document.createElement('li');
-    messageElement.className = 'message received'; // Received message
-    messageElement.textContent = msg.message;
-    messages.appendChild(messageElement);
-    window.scrollTo(0, document.body.scrollHeight); // Scroll to the latest message
-});
 
 </script>
 </body>
